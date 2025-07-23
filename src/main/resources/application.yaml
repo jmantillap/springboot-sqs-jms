@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: spring-boot-sqs-demo
+server:
+  port: 8080
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+      base-path:  /actuator
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+info:
+  app:
+    name: "Demo Spring Boot SQS"
+    description: "Demo Spring Boot con SQS"
+    contact: "Javier Mantilla"
+    email: "jmantillap@gmail.com"
+    version: "1.0.0"
+
+aws:
+  secret:
+    key: ${AWS_SECRET_ACCESS_KEY}
+  access:
+    key: ${AWS_ACCESS_KEY_ID}
+  sqs:
+    queue:
+      name: demo-queue
+      url: ${AWS_URL_QUEUE}
