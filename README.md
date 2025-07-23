@@ -1,4 +1,6 @@
 # Firmas desde postman
+Se tomo como referencia el siguiente ejemplo:
+https://github.com/hendisantika/spring-boot-sqs
 
 ### Enviar Mensaje por medio de jms usando: JmsTemplate
 
