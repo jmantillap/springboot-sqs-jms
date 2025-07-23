@@ -2,6 +2,7 @@ package work.javiermantilla.sqs.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,12 @@ public class MessageController {
         // Logic to send message to SQS
         producerService.sendMessageSQS(messageDto);
         return ResponseEntity.ok("Message sent from SQS Client successfully");
+    }
+
+    @GetMapping("/receive")
+    public ResponseEntity<String> receiveMessage() {
+        producerService.receiveMessage();
+        return ResponseEntity.ok("This endpoint is for receiving messages, not implemented yet");
     }
 
 }

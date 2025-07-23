@@ -7,16 +7,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
+import software.amazon.awssdk.services.sqs.model.Message;
+import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 import work.javiermantilla.sqs.dto.MessageDto;
+
+import java.util.List;
 
 @Service
 public class ProducerService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProducerService.class);
-
-    // Aquí puedes implementar la lógica para enviar mensajes a SQS
-    // Por ejemplo, utilizando JmsTemplate o cualquier otra librería que prefieras
 
      private final JmsTemplate jmsTemplate;
      private final String queueName;
@@ -54,6 +56,25 @@ public class ProducerService {
         } catch (Exception e) {
             LOG.error("Error sending message to SQS: {}", e.getMessage(), e);
         }
+    }
+
+    public void receiveMessage() {
+        LOG.info("This endpoint is for receiving messages, not implemented yet");
+        ReceiveMessageRequest receiveMessageRequest = ReceiveMessageRequest.builder()
+                .queueUrl(queueUrl)
+                .waitTimeSeconds(20)
+                .build();
+        List<Message> receivedMessages = sqsClient.receiveMessage(receiveMessageRequest).messages();
+        StringBuilder messages = new StringBuilder();
+        for (Message receivedMessage : receivedMessages) {
+            messages.append(receivedMessage.body()).append("\n");
+            DeleteMessageRequest deleteMessageRequest = DeleteMessageRequest.builder()
+                    .queueUrl(queueUrl)
+                    .receiptHandle(receivedMessage.receiptHandle())
+                    .build();
+            sqsClient.deleteMessage(deleteMessageRequest);
+        }
+        LOG.info("receive messages {} ", messages);
     }
 
     private <T>String convertDtoToJson(T dto) throws Exception {
